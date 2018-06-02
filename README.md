@@ -51,8 +51,7 @@ The constructor takes a keyword argment `extractor`, being one of the available 
  - NumWordsRulesExtractor
  - CanolaExtractor
 
-If no extractor is passed the DefaultExtractor will be used by default. Additional keyword arguments are either `html` for HTML text or `url`.
-
+This version only accept html text and you have to crawl the html yourself
     from boilerpipe.extract import Extractor
     extractor = Extractor(html_text, extractor='ArticleExtractor')
 
@@ -67,4 +66,7 @@ For `KeepEverythingWithMinKWordsExtractor` we have to specify `kMin` parameter, 
 
 	extractor = Extractor(extractor='KeepEverythingWithMinKWordsExtractor', url=your_url, kMin=20)
 
+
+## Performance
+Running test.py obtain roughly 40 iteration per second = 25ms per extraction on an i5-5250U, 4G RAM, Mac OS 10
 

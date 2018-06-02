@@ -43,6 +43,9 @@ setup(
         'JPype1',
         'chardet',
     ],
+    extras_require={  # Optional
+        'test': ['tqdm', 'requests'],
+    },
     author='Misja Hoebe',
     author_email='misja.hoebe@gmail.com',
     maintainer='Matthew Russell',
