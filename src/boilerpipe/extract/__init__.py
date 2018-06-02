@@ -5,6 +5,9 @@ except ImportError:
     from urllib2 import Request, urlopen
 import chardet
 import threading
+import ssl
+if hasattr(ssl, '_create_unverified_context'):
+    ssl._create_default_https_context = ssl._create_unverified_context
 
 DEFAULT_URLOPEN_TIMEOUT = 15
 
@@ -31,31 +34,14 @@ class Extractor(object):
     extractor = None
     source    = None
     data      = None
-    headers   = {'User-Agent': 'Mozilla/5.0'}
-
-    def __init__(self, extractor='DefaultExtractor', timeout=DEFAULT_URLOPEN_TIMEOUT, **kwargs):
-        if 'url' in kwargs:
-            request     = Request(kwargs['url'], headers=self.headers)
-            connection  = urlopen(request, timeout=timeout)
-            self.data   = connection.read()
-            encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
-            if encoding.lower() == 'text/html':
-                encoding = chardet.detect(self.data)['encoding']
-            try:
-                self.data = unicode(self.data, encoding)
-            except NameError:
-                self.data = self.data.decode(encoding)
-        elif 'html' in kwargs:
-            self.data = kwargs['html']
-            try:
-                if not isinstance(self.data, unicode):
-                    self.data = unicode(self.data, chardet.detect(self.data)['encoding'])
-            except NameError:
-                if not isinstance(self.data, str):
-                    self.data = self.data.decode(chardet.detect(self.data)['encoding'])
-        else:
-            raise Exception('No html or url provided')
-
+    def __init__(self, html, extractor='DefaultExtractor', timeout=DEFAULT_URLOPEN_TIMEOUT):
+        self.data = html
+        try:
+            if not isinstance(self.data, unicode):
+                self.data = unicode(self.data, chardet.detect(self.data)['encoding'])
+        except NameError:
+            if not isinstance(self.data, str):
+                self.data = self.data.decode(chardet.detect(self.data)['encoding'])
         try:
             # make it thread-safe
             if threading.activeCount() > 1:
@@ -78,14 +64,14 @@ class Extractor(object):
         self.source = BoilerpipeSAXInput(InputSource(reader)).getTextDocument()
         self.extractor.process(self.source)
 
-    def getText(self):
+    def get_text(self):
         return self.source.getContent()
 
-    def getHTML(self):
+    def get_html(self):
         highlighter = HTMLHighlighter.newExtractingInstance()
         return highlighter.process(self.source, self.data)
 
-    def getImages(self):
+    def get_image(self):
         extractor = jpype.JClass(
             "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
         images = extractor.process(self.source, self.data)

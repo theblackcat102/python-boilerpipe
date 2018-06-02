@@ -8,7 +8,7 @@ A python wrapper for [Boilerpipe](http://code.google.com/p/boilerpipe/), an exce
 
 Dependencies:
 
- * jpype
+ * JPype1
  * chardet
 
 The boilerpipe jar files will get fetched and included automatically when building the package.
@@ -54,13 +54,13 @@ The constructor takes a keyword argment `extractor`, being one of the available 
 If no extractor is passed the DefaultExtractor will be used by default. Additional keyword arguments are either `html` for HTML text or `url`.
 
     from boilerpipe.extract import Extractor
-    extractor = Extractor(extractor='ArticleExtractor', url=your_url)
+    extractor = Extractor(html_text, extractor='ArticleExtractor')
 
 Then, to extract relevant content:
 
-    extracted_text = extractor.getText()
+    extracted_text = extractor.get_text()
 
-    extracted_html = extractor.getHTML()
+    extracted_html = extractor.get_html()
 
 
 For `KeepEverythingWithMinKWordsExtractor` we have to specify `kMin` parameter, which defaults to `1` for now:
