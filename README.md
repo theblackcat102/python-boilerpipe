@@ -68,5 +68,12 @@ For `KeepEverythingWithMinKWordsExtractor` we have to specify `kMin` parameter, 
 
 
 ## Performance
-Running test.py obtain roughly 40 iteration per second = 25ms per extraction on an i5-5250U, 4G RAM, Mac OS 10
 
+Running test.py obtain the rough estimation of each extraction performance:
+
+ArticleExtractor : 37.50 iteration per second = 27ms per extraction 
+DefaultExtractor :  38.55 iteration per second = 26ms per extraction
+ArticleSentencesExtractor :  40.68 iteration per second = 25ms per extraction
+LargestContentExtractor : 35.37 iteration per second = 28ms per extraction
+
+Benchmark was done on an i5-5250U, 4G RAM, Mac OS 10
